@@ -19,21 +19,21 @@ R merupakan bahasa pemrograman yang terkenal akan kemampuannya dalam menghasilka
 Sistem pembuatan grafik dengan `ggplot` dapat dilakukan dengan menggunakan paket `ggplot2` yang merupakan implementasi dari konsep *Grammar of graphic* untuk bahasa pemrograman R. Anda dapat membaca artikel mengenai konsep tersebut melalui pranala [ini](http://vita.had.co.nz/papers/layered-grammar.pdf). Dengan memahami konsep dari *grammar of graphic*, Anda dapat membuat berbagai jenis plot dengan ringkas dan mudah. Sekarang aktifkanlah paket `ggplot2` tersebut terlebih dahulu!
 
 ```{r load-package}
-___
+library (ggplot2)
 ```
 
 Dalam contoh ini Anda akan membuat grafik dari dataset `diamonds` yang tersedia dalam paket `ggplot2`. Anda dapat melihat isi serta dokumentasi dari dataset tersebut dengan menjalankan `diamonds` dan `?diamonds`. Berisi informasi apakah data `diamonds`? Silakan lakukan inspeksi pada struktur data tersebut!
 
 ```{r}
 diamonds
-?___
+?diamonds
 str(diamonds)
 ```
 
 Anda dapat menggunakan fungsi `qplot()` untuk membuat grafik menggunakan `ggplot2`. Bacalah terlebih dahulu dokumentasi fungsi `qplot()` dan kemudian lengkapilah *chunk* berikut untuk membuat grafik hubungan antara berat (sumbu x), harga (sumbu y) dan kejernihan intan (variasi warna) dari dataset diamonds!
 
 ```{r}
-qplot(x = ___, y = price, colour = ___, data = ___)
+qplot(x = carat , y = price, colour = clarity, data = diamonds)
 ```
 
 Selamat Anda telah berhasil membuat grafik pertama menggunakan `ggplot2`! Pembuatan grafik dengan menggunakan fungsi `qplot()` memang relatif mudah, namun fiturnya terbatas dan kurang fleksibel. Oleh karena itu, Anda akan diajak untuk mempelajari dan menggunakan fungsi `ggplot()` untuk membuat visualisasi data dengan lebih leluasa. Grafik diatas dapat diolah kembali dengan menggunakan penulisan kode sebagai berikut::
@@ -52,8 +52,9 @@ plot_diamonds <- ggplot(data = diamonds) +
   geom_point(mapping = aes(x = carat, y = price, colour = clarity)) # Saat output disimpan ke dalam obyek R, grafik tidak otomatis dicetak pada layar
 
 plot_diamonds # Untuk mencetak grafik, Anda harus menjalankan nama obyek R yang sebelumnya dibuat
+library(here)
+ggsave(filename = here("diamonds.png"), plot = plot_diamonds)
 
-ggsave(filename = "diamonds.png", plot = plot_diamonds)
 ```
 
 Meskipun penulisan kode R untuk membuat grafik menggunakan fungsi `ggplot()` relatif lebih panjang, lebih banyak kostumisasi dan pengaturan grafik yang dapat dilakukan dengan menggunakan fungsi `ggplot()` dibandingkan fungsi `qplot()`. Dalam pelatihan ini Anda akan diminta untuk membuat banyak grafik dengan menggunakan struktur penulisan kode sebagai berikut:
@@ -71,27 +72,27 @@ Anda dapat menarik kesimpulan berdasarkan struktur penulisan kode R di atas bahw
 
 Pelajarilah dokumentasi fungsi `aes()` dan `geom_point()` (sebagai salah satu contoh *geometric object*) melalui kode berikut!
 ```{r}
-___
-___
+aes()
+geom_point()
 ```
 
 Selanjutnya Anda akan diminta untuk bereksperimen membuat visualisasi data Ujian Nasional tingkat SMP di Kota Bandung yang disediakan oleh [Open Data Kota Bandung](http://data.bandung.go.id). Data tersebut tersedia sebagai berkas "un_smp.csv" dalam subdirektori "data-raw". Silakan impor data tersebut sebagai obyek R bernama `un_smp` menggunakan fungsi `vroom()` dan `here()` dan cetaklah pada layar! (Petunjuk: aktifkan terlebih dahulu paket-paket yang relevan)
 
 ```{r}
-___
+library(vroom)
 library(here)
 ```
 
 ```{r}
-un_smp <- vroom(here("data-raw", "___"))
+un_smp <- vroom(here("data-raw", "un_smp.csv"))
 un_smp
 ```
 
 Pelajarilah struktur data `un_smp` tersebut. Ada berapa observasi dan variabel yang tersedia? Apa saja nama dari setiap kolom? Data tahun berapa sajakah yang tersedia pada data tersebut?
 
 ```{r}
-___(un_smp)
-___(un_smp)
+colnames(un_smp)
+summary(un_smp$tahun)
 ```
 
 Dalam modul ini Anda diminta untuk membuat visualisasi hubungan antara nilai UN mata pelajaran matematika dan bahasa Indonesia. Namun sebelum itu, penting untuk diingat bahwa dalam sistem `ggplot2` suatu grafik dibangun atas tiga komponen utama yaitu *data*, *aesthetic mapping*, dan *geometric objects*. Komponen pertama (*data*) dapat diatur dengan menggunakan baris kode berikut:
@@ -103,35 +104,35 @@ ggplot(un_smp)
 Selanjutnya kita perlu mendefinisikan dimensi mana dari data yang ingin digambarkan dalam grafik. Pendefinisian ini dilakukan dalam komponen *aesthetic mapping* (`aes()`). Anda diminta untuk mempelajari hubungan antara nilai UN matematika versus bahasa Indonesia. Untuk itu, Anda dapat mendefinisikan variabel `bahasa_indonesia` pada sumbu x dan `matematika` pada sumbu y.
 
 ```{r}
-ggplot(un_smp, aes(x = ___, y = ___))
+ggplot(un_smp, aes(x = bahasa_indonesia , y = matematika))
 ```
 
 Pendefinisian sumbu x dan y telah menghasilkan *layer* baru dalam grafik. Namun, Anda masih perlu mendefinisikan bentuk dari grafik tersebut melalui komponen *geometric objects* (`geom_*()`) sebelum grafik tersebut dapat dibaca. Tambahkan obyek geometri berupa titik di atas *layers* yang telah dibuat sebelumnya!
 
 ```{r}
-ggplot(un_smp, aes(x = ___, y = matematika)) +
-  ___
+ggplot(un_smp, aes(x = bahasa_indonesia, y = matematika)) +
+ geom_point()
 ```
 
 Selamat sekarang grafik tersebut mulai dapat terbaca! Sekarang Anda ingin mengetahui bagaimanaka representasi dari status sekolah (Negeri vs Swasta) pada grafik. Anda dapat menambahkan fungsi `aes()` pada obyek geometri untuk melaukan hal tersebut. Dalam contoh ini Anda akan menggunakan *aesthetic* berupa warna titik untuk membedakan antar status sekolah.
 
 ```{r}
-ggplot(un_smp, aes(x = bahasa_indonesia, y = ___)) +
-  geom_point(aes(colour = ___))
+ggplot(un_smp, aes(x = bahasa_indonesia, y = matematika)) +
+  geom_point(aes(colour = status))
 ```
 
 Mudah sekali bukan? Bagaimana jika Anda ingin menambahkan informasi jumlah peserta ujian yang direpresentasikan oleh ukuran titik dalam grafik tersebut?
 
 ```{r}
-ggplot(un_smp, aes(x = bahasa_indonesia, y = ___)) +
-  geom_point(aes(colour = status, size = ___))
+ggplot(un_smp, aes(x = bahasa_indonesia, y = matematika)) +
+  geom_point(aes(colour = status, size = jumlah_peserta))
 ```
 
 Sangat menarik! Nampaknya jumlah peserta ujian juga memiliki hubungan dengan nilai ujian, benarkah? Namun sayang sekali grafik tersebut sekarang telihat sangat "penuh" sehingga sulit membedakan antar titik. Apakah transparasi titik-titik tersebut dapat dimodifikasi? Ya! Anda dapat menambahkan argumen "alpha" (nilai 0 hingga 1) pada obyek geometri yang diinginkan. (Bonus: Apa yang terjadi jika Anda menambahkan argumen "alpha" dalam fungsi `aes()` pada obyek geometri?)
 
 ```{r}
-ggplot(un_smp, aes(x = ___, y = ___)) +
-  geom_point(aes(colour = ___, size = jumlah_peserta), alpha = 0.2)
+ggplot(un_smp, aes(x = bahasa_indonesia, y = matematika)) +
+  geom_point(aes(colour = status, size = jumlah_peserta), alpha = 0.2)
 ```
 
 Anda penasaran bagaimanakah hubungan antar nilai ujian nasional tersebut jika dibagi per kelompok tahun. Karena Anda sudah menggunakan empat dimensi untuk mempresentasikan data (sumbu x, sumbu y, warna titik, ukuran titik), sekarang mungkin saatnya Anda menggunakan pendekatan berbeda yaitu menggunakan *facet*! Tambahkanlah baris kode `facet_wrap(~tahun, scales = "free")` pada *chunk* berikut!
@@ -139,21 +140,21 @@ Anda penasaran bagaimanakah hubungan antar nilai ujian nasional tersebut jika di
 ```{r}
 ggplot(un_smp, aes(x = bahasa_indonesia, y = matematika)) +
   geom_point(aes(colour = status, size = jumlah_peserta), alpha = 0.2) +
-  ___
+  facet_wrap(~tahun, scales = "free")
 ```
 
 Hasil yang sangat menarik! Namun sayangnya Anda masih belum puas dengan grafik tersebut dalam hal estetika. Lengkapilah *chunk* berikut untuk melakukan modifikasi estetika pada grafik Anda tersebut! Simpanlah grafik tersebut dalam obyek R dengan nama `mtk_vs_ind` dan jangan lupa cetak hasilnya pada layar.
 
 ```{r}
-___ <- ggplot(un_smp, aes(x = bahasa_indonesia, y = matematika)) +
+mtk_vs_ind <- ggplot(un_smp, aes(x = bahasa_indonesia, y = matematika)) +
   geom_point(aes(colour = status, size = jumlah_peserta), alpha = 0.2) +
   facet_wrap(~tahun, scales = "free") +
   labs(
-    x = "___",
-    y = "___",
-    colour = "___",
+    x = "bahasa_indonesia",
+    y = "matematika",
+    colour = "status",
     size = "# peserta",
-    title = "___",
+    title = "Nilai Ujian Bahasa Indonesia vs Matematika",
     subtitle = "Ujian Nasional SMP di Kota Bandung 2015-2019",
     caption = "Sumber: Open Data Kota Bandung"
   ) +
@@ -165,7 +166,7 @@ mtk_vs_ind
 Luar biasa! Sekarang saatnya menyimpan grafik tersebut pada komputer Anda.
 
 ```{r}
-ggsave("mtk_vs_ind.png", plot = ___)
+ggsave("mtk_vs_ind.png", plot = mtk_vs_ind)
 ```
 
 Selamat Anda telah berhasil membuat visualisasi untuk data `un_smp`. Silakan Anda bereksperimen membuat grafik dengan variabel-variabel lain atau bahkan menggunakan obyek geometri lainnya untuk menghasilkan visulisasi data yang berbeda.
