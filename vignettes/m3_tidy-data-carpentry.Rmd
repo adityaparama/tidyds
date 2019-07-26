@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 Dalam modul ini kita akan menggunakan dataset yang tersedia dari paket `tidyr` untuk memahami konsep tidy data. Silakan aktifkan paket tersebut terlebih dahulu!
 
 ```{r}
-___
+library(tidyr)
 ```
 
 Anda diminta untuk melakukan identifikasi karakteristik dari dataset-dataset yang tersedia, yaitu `table1`, `table2`, `table3`, `table4a`, `table4b`, dan `table5`. Cetaklah dataset tersebut pada layar dan berikan komentar Anda serta diagnosa Anda! Manakah yang termasuk tidy data dan manakah yang tidak termasuk tidy data?
@@ -30,52 +30,52 @@ Anda diminta untuk melakukan identifikasi karakteristik dari dataset-dataset yan
 table1
 ```
 
-`table1` termasuk/tidak termasuk "Tidy data" karena ...
+`table1` termasuk "Tidy data" karena setiap variabel sudah dalam satu kolom sendiri dan setiap obserasi pada satu row
 
 ```{r}
 table2
 ```
 
-`table2` termasuk/tidak termasuk "Tidy data" karena ...
+`table2` tidak termasuk "Tidy data" karena pada kolom type ada 2 variabel yang digabungkan (cases & population)
 
 ```{r}
 table3
 ```
 
-`table3` termasuk/tidak termasuk "Tidy data" karena ...
+`table3` tidak termasuk "Tidy data" karena pada kolom rate terdapat 2 observasi
 
 
 ```{r}
 table4a
 ```
 
-`table4a` termasuk/tidak termasuk "Tidy data" karena ...
+`table4a` tidak termasuk "Tidy data" karena pada satu buah observasi terdapat 2 data (tahun 1999 dan 2000)
 
 ```{r}
 table4b
 ```
 
-`table4b` termasuk/tidak termasuk "Tidy data" karena ...
+`table4b` termasuk "Tidy data" karena karena pada satu buah observasi terdapat 2 data (tahun 1999 dan 2000)
 
 ```{r}
 table5
 ```
 
-`table5` termasuk/tidak termasuk "Tidy data" karena ...
+`table5` tidak termasuk "Tidy data" karena pada setiap observasi, di kolom rate terdapat 2 data
 
 ## Mempersiapkan tidy data
 
 Setelah berhasil melakukan identifikasi mana tidy data dan mana yang bukan merupakan tidy data, sekarang Anda akan melakukan perbaikan pada dataset sehingga menjadi tidy data. Kita akan banyak menggunakan fungsi `spread()` dan `gather()` yang berasal dari paket `tidyr`. Pelajarilah kedua paket tersebut dengan membuka dokumentasi! (Petunjuk: `?nama_fungsi`)
 
 ```{r}
-?___
-___
+?spread
+?gather
 ```
 
 Sebagai contoh pertama, kita akan memperbaiki `table2` sehingga menjadi tidy data. Cetaklah data tersebut pada layar untuk kembali mengingat alasan mengapa data tersebut tidak termasuk tidy data!
 
 ```{r}
-___
+table2
 ```
 
 Kasus seperti pada `table2` tersebut dapat ditangani dengan cara memanfaatkan fungsi `spread()` seperti contoh yang akan diberikan pada *chunk* berikut. Dapatkah Anda menjelaskan mengapa fungsi `spread()` bermanfaat untuk kasus tersebut?
@@ -88,7 +88,7 @@ table2_tidy
 Selanjutnya kita akan menangani `table4a`. Masih ingatkah Anda mengapa `table4a` tidak termasuk dalam kategori tidak tidy data? Cetaklah data tersebut pada layar!
 
 ```{r}
-___
+table4a
 ```
 
 Kasus seperti pada `table4a` tersebut dapat diselesaikan dengan menggunakan fungsi `gather()`. Dapatkah Anda menyebutkan alasannya? Perhatikan contoh berikut:
@@ -102,8 +102,8 @@ Sekarang Anda dipersilakan untuk melakukan perbaikan serupa pada `table4b` namun
 
 ```{r}
 table4b
-table4b_tidy <- gather(table4b, key = "year", value = "___", -country)
-___
+table4b_tidy <- gather(table4b, key = "year", value = "population", -country)
+table4b_tidy
 ```
 
 Perhatikan kode perbaikan untuk `table4a` dan `table4b`. Apakah ada perbedaaan yang Anda amati? Jika iya, mengapa pada keduanya perbaikan tetap dapat berhasil dilakukan?
@@ -119,8 +119,8 @@ table4b_tidy
 Ya! Apabila `table4a_tidy` dan `table4b_tidy` digabungkan maka hasilnya akan menjadi `table1`. Dapatkah Anda menggabungkan `table4a_tidy` dan `table4b_tidy` tersebut menjadi satu? Simpanlah hasil penggabungan tersebut dalam obyek R bernama `tb_small` dan cetak hasilnya pada layar! (Petunjuk: fungsi `merge()`)
 
 ```{r}
-tb_small <- ___(table4a_tidy, table4b_tidy)
-___
+tb_small <- merge(table4a_tidy, table4b_tidy)
+tb_small
 ```
 
 Selamat Anda telah berhasil memperbaiki data sehingga menjadi tidy data!
@@ -134,13 +134,13 @@ Sekarang cetaklah data `who` dan `population` pada layar!
 **Data`who`**
 
 ```{r}
-___
+?who
 ```
 
 **Data `population`**
 
 ```{r}
-___
+?population
 ```
 
 Daripada mencetak keseluruhan data pada layar, Anda dapat menggunakan alternatif mencetak ringkasan atau struktur data saja. Lakukanlah hal tersebut pada `who` dan `population`! (Petunjuk: modul 2)
@@ -148,19 +148,19 @@ Daripada mencetak keseluruhan data pada layar, Anda dapat menggunakan alternatif
 **Struktur data `who`**
 
 ```{r}
-___(who)
+summary(who)
 ```
 
 **Struktur data `population`**
 
 ```{r}
-___(population)
+summary(population)
 ```
 
 Sekarang kita akan membuat versi utuh dan lengkap dari `tb_small`. Data yang akan kita buat akan mencakup lebih banyak negara dan rentang waktu pengamatan yang lebih panjang. Paket `dplyr` merupakan "perkakas" yang sangat handal digunakan untuk mencapai tujuan tersebut. Aktifkanlah paket tersebut terlebih dahulu!
 
 ```{r}
-___(dplyr)
+library(dplyr)
 ```
 
 Sangat banyak fungsi yang terdapat pada paket `dplyr`, namun ada enam fungsi utama yang wajib Anda kuasai yaitu: `select()`, `filter()`, `arrange()`, `mutate()`, `group_by()`, dan `summarise()`. Silakan pelajari fungsi-fungsi tersebut dengan membaca dokumentasinya.
@@ -201,21 +201,21 @@ tb_full_b
 
 Buatlah ringkasan apa saja hal yang dilakukan pada setiap tahap transformasi data diatas! Anda dapat membuat ringkasan baik berdasarkan cara pertama atau cara kedua.
 
-1. ___
-2. ___
-3. ___
-4. ___
-5. ___
-6. ___
-7. ___
-8. ___
+1. gather
+2. select
+3. groupby
+4. summarise
+5. ungroup
+6.left_join
+7. filter
+8. mutate
 
 Berikan komentar Anda pada dua jenis cara penulisan kode di atas! Menurut Anda cara penulisan manakah yang lebih mudah dilakukan dan dipahami?
 
 Silakan periksa apakah `tb_full_a` dan `tb_full_b` identik satu sama lain dengan menggunkan fungsi `identical()`!
 
 ```{r}
-___(tb_full_a, tb_full_b)
+identical(tb_full_a, tb_full_b)
 ```
 
 > Selamat Anda telah menyelesaikan modul 3! Silakan jalankan "Ctrl + Shift + K" atau klik tombol "Knit" untuk membuat dokumen final.

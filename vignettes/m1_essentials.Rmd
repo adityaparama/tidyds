@@ -24,6 +24,10 @@ Di dokumen R Markdown Anda dapat melakukan pengaturan teks dengan menggunakan Ma
 2. Kalimat ini dicetak miring
 3. Kalimat ini berisi tautan https://www.markdownguide.org/getting-started
 
+1. **Kalimat ini dicetak tebal**
+2. _Kaliat ini dicetak miring_
+3. [Kalimat ini berisi tautan](https://www.markdownguide.org/getting-started)
+
 Seperti disebutkan sebelumnya bahwa Anda juga dapat menuliskan kode pemrograman di dokumen R Markdown. Namun untuk membedakan antara teks biasa dengan kode pemrograman diperlukan suatu blok yang disebut dengan *chunk* (di Jupyter Notebook disebut sebagai *cell*). Suatu *chunk* ditandai dengan adanya tiga *backtics* "`" pada awal dan akhir baris kode pemrograman seperti contoh berikut:
 
 ```
@@ -31,11 +35,11 @@ tulis kode pemrograman
 pada bagian ini
 ```
 
-Selanjutnya untuk menegaskan bahasa pemrograman apa yang digunakan dan akan dieksekusidalam suatu *chunk*, Anda dapat menambahkan penanda "{bahasa_pemrograman}" tepat setelah penanda *backtics* di awal *chunk*. R Markdown mendukung dan dapat mengeksekusi beberapa jenis bahasa pemrograman selain R, misalnya Python, Julia, C, Fortran, SQL, dan Shell script. Dalam contoh berikut menunjukan penggunaan bahasa pemrograman R di dalam suatu *chunk*:
+Selanjutnya untuk menegaskan bahasa pemrograman apa yang digunakan dan akan dieksekusi dalam suatu *chunk*, Anda dapat menambahkan penanda "{bahasa_pemrograman}" tepat setelah penanda *backtics* di awal *chunk*. R Markdown mendukung dan dapat mengeksekusi beberapa jenis bahasa pemrograman selain R, misalnya Python, Julia, C, Fortran, SQL, dan Shell script. Dalam contoh berikut menunjukan penggunaan bahasa pemrograman R di dalam suatu *chunk*:
 
 ```{r}
 head(mtcars) # melihat 6 baris pertama dari data mtcars, mtcars adalah data bawaan yang tersedia di R
-summary(mtcars) # melihat rigkasan statustik dari data data mtcars
+summary(mtcars) # melihat rigkasan statistik dari data data mtcars
 ```
 
 Kombinasi "Ctrl + Alt + I" dapat Anda gunakan untuk membuah *chunk* dengan bahasa pemrograman R. Buatlah *chunk* baru berisi kode pemrograman R sebagai berikut!
@@ -44,10 +48,18 @@ filled.contour(volcano,
                color.palette = terrain.colors, 
                plot.title = title("Topografi Gunung Maunga Whau"), 
                key.title = title("Tinggi\n(meter)"))
+               
+```{r}
+filled.contour(volcano,
+               color.palette = terrain.colors, 
+               plot.title = title("Topografi Gunung Maunga Whau"), 
+               key.title = title("Tinggi\n(meter)"))
+```
+
 
 Bagaimana cara menjalankan baris kode yang telah Anda tulis? Anda dapat melakukan evaluasi atau eksekusi baris kode yang terdapat di dalam *chunk* dengan cara menekan "Ctrl + Enter" atau "Ctrl + Shift + Enter". Dapatkan Anda menebak perbedaan antara dua kombinasi kibor tersebut?
 
-R Markdown dapat disebut sebagai dokumen perantara untuk memproduksi dokumen final. Anda dapat dengan mudah memproduksi dokumen final dengan berbagai format dengan menggunakan R Markdown, misalnya dokumen teks biasa, salindia presentasi, laman web, dan bahkan aplikasi web interaktif. Beberapa ekstensi dokumen keluaran yang dapat dihasilkan diantaranya html, md, pdf, docx, odt, dan tex. Sebagai contoh pada modul-modul pelatihan ini kita akan memproduksi dokune final berupa "Github Flavoured Markdown" dengan ekstensi md.
+R Markdown dapat disebut sebagai dokumen perantara untuk memproduksi dokumen final. Anda dapat dengan mudah memproduksi dokumen final dengan berbagai format dengan menggunakan R Markdown, misalnya dokumen teks biasa, salindia presentasi, laman web, dan bahkan aplikasi web interaktif. Beberapa ekstensi dokumen keluaran yang dapat dihasilkan diantaranya html, md, pdf, docx, odt, dan tex. Sebagai contoh pada modul-modul pelatihan ini kita akan memproduksi dokumen final berupa "Github Flavoured Markdown" dengan ekstensi md.
 
 Kemudian bagaimana cara mengatur dan memproduksi dokumen final tersebut? Caranya adalah dengan mengatur metadata pada dokumen R Markdown, khususnya pada baris `output: ...` (perhatikan kode pada baris-baris awal dokumen R Markdown ini!). Apabila Anda ingin menghasilkan dokumen final berupa docx, maka cukup ubah kode `output: github_document` menjadi `output: word_document`. Terakhir, Anda dapat memproduksi dokumen final dengan cara klik tombol "Knit" atau kombinasi "Ctrl + Shift + K". Dokumen final yang dihasilkan akan berisi teks narasi, kode pemrograman, dan keluaran dari kode pemrograman tersebut. Silakan coba setelah Anda mengisi dan menjawab seluruh pertanyaan dalam modul pertama ini.
 
@@ -55,7 +67,7 @@ Kemudian bagaimana cara mengatur dan memproduksi dokumen final tersebut? Caranya
 
 Jalankanlah kode dalam *chunk* berikut:
 ```{r}
-"Halo, nama saya adalah ..." # isi dengan nama Anda
+"Halo, nama saya adalah Aditya Parama" # isi dengan nama Anda
 ```
 
 Saat Anda menjalankan *chunk* di atas, R akan mengevaluasi dan melakukan eksekusi pada baris kode yang dituliskan. Dalam contoh di atas, keluaran dari eksekusi baris kode adalah kalimat "Halo, nama saya adalah (nama Anda)" yang tercetak di dokumen R Markdown atau konsol RStudio. Mengapa kalimat "# isi dengan nama Anda" tidak ikut tercetak?
@@ -78,7 +90,7 @@ list(15, "r", "TRUE", 24L)
 Saat Anda mengeksekusi *chunk* di atas, keluaran dari kode yang Anda eksekusi hanya tercetak pada layar. Anda dapat "menyimpan" keluaran dari kode menjadi sebuah obyek R dengan menggunakan tanda `<-` dengan format "nama_obyek <- kode_yang_dieksekusi". Buatlah *vector* berupa huruf-huruf vokal dan simpanlah hasilnya dalam obyek R dengan nama `huruf_vokal`! Isilah "___" dengan jawaban yang sesuai!
 
 ```{r}
-___ <- c("a", ___, "u", ___, "o") # objek data tersimpan dengan nama 'huruf_vokal', namun tidak tercetak pada layar
+huruf_vokal <- c("a", "i" , "u", "e", "o") # objek data tersimpan dengan nama 'huruf_vokal', namun tidak tercetak pada layar
 huruf_vokal # mencetak objek data dengan nama 'huruf_vokal' pada layar (Anda juga dapat menuliskannya sebagai "print(huruf_vokal)")
 ```
 
@@ -94,7 +106,7 @@ typeof(TRUE)
 Dapatkah Anda mengetahui *type* dari `huruf_vokal` yang telah Anda buat diatas?
 
 ```{r}
-___(huruf_vokal)
+typeof(huruf_vokal)
 ```
 
 Apa yang terjadi jika Anda obyek menggunakan fungsi `c()` namun setiap elemen dari obyek tersebut memiliki *type* yang berbeda? Dapatkah Anda memberikan penjelasan?
@@ -127,12 +139,12 @@ Sekarang cobalah lakukan operasi artimatika sama seperti pada *chunk* di atas un
 x <- c(34, 86, 98, 23, 66)
 y <- c(5, 6, 2, 8, 4)
 x + y
-___
-___
-___
-___
-___
-___
+x - y
+x * y
+x/y
+x^y
+x %% y
+x %/% y
 ```
 
 
@@ -141,14 +153,14 @@ Fungsi memiliki tugas utama untuk mengolah suatu *input* menjadi *output*. Anda 
 
 ```{r}
 iris # mencetak data pada layar
-?iris # ___
-dim(iris) # ___
-str(iris) # ___
-colnames(iris) # ___
-head(iris) # ___
-head(iris, 10) # ___
-tail(iris) # ___
-tail(iris, 10) # ___
+?iris # melihat definisi iris
+dim(iris) # Retrieve or set the dimension of an object
+str(iris) # Compactly display the internal structure of an R object
+colnames(iris) # Retrieve or set the row or column names of a matrix-like object.
+head(iris) # returns the first parts of a data frame
+head(iris, 10) # returns the first 10 parts of a data frame
+tail(iris) # returns the last parts of a data frame
+tail(iris, 10) # returns the last 10 parts of a data frame
 summary(iris) # ___
 iris[1, ] # ___
 iris[c(1, 6, 12),] # ___
@@ -158,8 +170,7 @@ iris$Sepal.Length # ___
 class(iris$Species) # ___
 length(iris$Petal.Width) # m___
 levels(iris$Species) # ___
-length(levels(iris$Species)) # ___
-unique(iris$Species) # ___
+length(levels(iris$Species)) # ___unique(iris$Species) # ___
 length(unique(iris$Species)) # ___
 mean(iris$Sepal.Length) # ___
 sd(iris$Sepal.Length) # ___

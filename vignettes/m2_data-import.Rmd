@@ -21,7 +21,7 @@ Tahap terpenting sebelum Anda melakukan impor data adalah menentukan alamat dima
 Dalam pelatihan ini Anda akan menggunakan paket `here` untuk menentukan dan menuliskan alamat berkas atau dokumen. Aktifkanlah paket `here` terlebih dahulu dengan menjalankan `library(nama_paket)`!
 
 ```{r}
-library(___)
+library(here)
 ```
 
 Kemudian periksalah alamat direktori utama berada dengan cara menjalankan fungsi `dr_here()`. Mengapa direktori utama terdeteksi dan berada pada alamat tersebut?
@@ -33,7 +33,12 @@ dr_here()
 Anda juga dapat menggunakan fungsi `here()` untuk mendapatkan alamat direktori utama, cobalah! Selanjutnya bagaimana cara untuk menuliskan alamat suatu berkas atau dokumen dengan cara menggunakan fungsi `here()`? Dalam contoh berikut Anda dapat menentukan alamat dari berkas 'udara_bandung.xlsx' yang tersimpan dalam subdirektori "data-raw".
 
 ```{r}
-___ # dimanakah alamat direktori utama/Project berada?
+here()
+```
+
+
+```{r}
+here() # dimanakah alamat direktori utama/Project berada?
 here("data-raw", "udara_bandung.xlsx")
 ```
 
@@ -49,21 +54,22 @@ Sekarang aktifkanlah paket `readxl` dan imporlah berkas "udara_bandung.xlsx" seb
 
 ```{r}
 library(readxl)
-udara_bandung <- read_excel(path = here("data-raw", "___"))
+udara_bandung <- read_excel(path = here("data-raw", "udara_bandung.xlsx"))
+View(udara_bandung)
 ```
 
 Jika tidak ada pesan galat, maka berarti Anda telah berhasil mengimpor berkas tersebut. Selamat! Sekarang Anda dapat melakukan inspeksi terhadap obyek `udara_bandung` tersebut. Ada berapa baris dan kolom yang ada pada obyek tersebut? (Petunjuk: fungsi `nrow()` dan `ncol()`)
 
 ```{r}
 udara_bandung
-___(udara_bandung)
-ncol(___)
+nrow(udara_bandung)
+ncol(udara_bandung)
 ```
 
-Sekarang cobalah Anda buka berkas "udara_bandung.xlsx" menggunakan perkakas Microsoft Excel atau sejenisnya. Ada berapa lembar kerja (*sheet*) yang terdapat dalam berkas tersebut? Bagaimana cara Anda mengimpor lembar kerja ke-2 dari berkas Excel tersebut dan menyimpannya sebagai obyek R bernama `udara_badung_gedebage`? (Petunjuk: `help(read_excel)`)
+Sekarang cobalah Anda buka berkas "udara_bandung.xlsx" menggunakan perkakas Microsoft Excel atau sejenisnya. Ada berapa lembar kerja (*sheet*) yang terdapat dalam berkas tersebut? Bagaimana cara Anda mengimpor lembar kerja ke-2 dari berkas Excel tersebut dan menyimpannya sebagai obyek R bernama `udara_bandung_gedebage`? (Petunjuk: `help(read_excel)`)
 
 ```{r}
-___ <- read_excel(here("data-raw", "udara_bandung.xlsx"), sheet = ___)
+udara_bandung_gedebage <- read_excel(here("data-raw", "udara_bandung.xlsx"), sheet = 2)
 udara_bandung_gedebage
 ```
 
@@ -80,40 +86,40 @@ Mengapa ada banyak fungsi dan paket berbeda untuk tujuan yang sama? Hal utama ya
 Aktifkanlah paket `vroom` dan bacalah dokumentasi fungsi `vroom()`!
 
 ```{r}
-___
+library(vroom)
 help(vroom)
 ```
 
 Sekarang cobalah impor berkas "anggaran-dinkes-2013.csv" yang berada dalam subdirektori "data-raw" dengan menggunakan fungsi `vroom()` dan simpanlah sebagai obyek R dengan nama `dinkes_2013_vroom`! Kemudian lakukanlah inspeksi terhadap `dinkes_2013_vroom` tersebut. Ada berapa observasi dan variabel? Apa saja nama dan tipe dari setiap variabel data tersebut? (Petunjuk: fungsi `str()` serta `summary()`)
 
 ```{r}
-dinkes_2013_vroom <- vroom(here("data-raw", "___"))
+dinkes_2013_vroom <- vroom(here("data-raw", "anggaran-dinkes-2013.csv"))
 dinkes_2013_vroom
-___(dinkes_2013_vroom)
-summary(___)
+str(dinkes_2013_vroom)
+summary(dinkes_2013_vroom)
 ```
 
 Sebagai perbandingan, sekarang imporlah berkas yang sama namun menggunakan fungsi `read.csv()` dari paket `utils` dan simpanlah hasilnya sebagai obyek R bernama `dinkes_2013_utils`! Lakukanlah inspeksi serupa dengan `dinkes_2013_vroom`. Apakah ada perbedaan yang Anda temukan? (Catatan: Anda tidak perlu menjalankan `library(utils)` karena paket `utils` secara otomatis diaktifkan saat sesi R dimulai)
 
 ```{r}
-___ <- read.csv(here("data-raw", "anggaran-dinkes-2013.csv"))
+dinkes_2013_utils <- read.csv(here("data-raw", "anggaran-dinkes-2013.csv"))
 dinkes_2013_utils
 str(dinkes_2013_utils)
-___
+summary(dinkes_2013_utils)
 ```
 
 Anda dapat menggunakan fungsi `class()` untuk mengetahui jenis dari suatu obyek R. Apa hasil yang muncul saat Anda menjalankan fungsi tersebut pada `dinkes_2013_vroom` dan `dinkes_2013_utils`? Jika terdapat perbedaan, dapatkah Anda menjelaskannya? (Petunjuk: `?nama_fungsi`)
 
 ```{r}
-___(dinkes_2013_vroom)
-class(___)
+class(dinkes_2013_vroom)
+class(dinkes_2013_utils)
 ```
 
 Terakhir lakukanlah perbandingan antara jenis data pada kolom "program" dari masing-masing dataset tersebut! Anda dapat mengekstrak kolom dari suatu *dataframe* menggunakan operator `$` dengan format `nama_tabel$nama_kolom`. Gunakanlah fungsi `class()` seperti di atas! (Petunjuk: `stringsAsFactors = TRUE`)
 
 ```{r}
-class(dinkes_2013_vroom$___)
-class(___$program)
+class(dinkes_2013_vroom$program)
+class(dinkes_2013_utils$program)
 ```
 
 ## Impor banyak berkas *delimited*
@@ -125,7 +131,7 @@ Anda akan diperkenalkan dengan tiga cara untuk mencapai hal tersebut. Cara perta
 Ketiga cara yang akan dilakukan memiliki satu tahap pertama yang sama, yaitu membuat daftar alamat berkas-berkas yang akan diimpor. Anda dapat membuat daftar alamat tersebut dengan cara menggunakan fungsi `list.files()`. Sesuaikanlah *pattern* agar alamat yang terseleksi hanyalah alamat berkas yang relevan! Simpan daftar alamat tersebut dalam obyek R bernama `berkas_anggaran_dinkes`.
 
 ```{r}
-___ <- list.files(path = here("data-raw"), pattern = "___", full.names = TRUE)
+berkas_anggaran_dinkes <- list.files(path = here("data-raw"), pattern = "anggaran-dinkes", full.names = TRUE)
 berkas_anggaran_dinkes
 ```
 
@@ -157,7 +163,7 @@ Menurut Anda manakah cara yang paling mudah dan cepat? Pergunakan fungsi `identi
 
 ```{r}
 identical(anggaran_dinkes_forloop, anggaran_dinkes_lapply)
-identical(___, anggaran_dinkes_vroom)
+identical(anggaran_dinkes_forloop, anggaran_dinkes_vroom)
 identical(anggaran_dinkes_lapply, anggaran_dinkes_vroom)
 ```
 
@@ -168,15 +174,15 @@ Bukalah berkas "roster.xlsx" yang berada dalam subdirektori "data-raw" menggunak
 Sekarang imporlah data "roster.xlsx" tersebut dan simpanlah ke dalam obyek R bernama `roster_raw1`. Apakah ada pesan yang muncul? Pelajarilah struktur `roster_raw1` dengan menggunakan fungsi inspeksi data yang sebelumnya Anda pergunakan di atas.
 
 ```{r}
-___ <- read_excel(here("data-raw", "___"))
-___(roster_raw1)
+roster_raw1 <- read_excel(here("data-raw", "roster.xlsx"))
+summary(roster_raw1)
 ```
 
 Cobalah Anda ekstrak (*subset*) kolom "Employee Status" dan kolom "% Allocated" dengan menggunakan operator `$`! Perhatikan kode yang Anda tulis. (Petunjuk: `nama_tabel$nama_kolom`)
 
 ```{r}
-roster_raw1$___
-roster_raw1$___
+roster_raw1$"Employee Status"
+roster_raw1$"% Allocated"
 ```
 
 Jika Anda perhatikan, pada nama kolom yang Anda tulis secara otomatis oleh RStudio akan ditambahkan dua tanda *backtics* di awal dan akhir. Cobalah Anda hapus tanda tersebut dan jalankan ulang baris kode di atas. Dapatkah Anda menjelaskan apa yang terjadi? (Petunjuk: `?make.names`)
