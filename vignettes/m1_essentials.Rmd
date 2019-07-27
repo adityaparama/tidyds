@@ -161,7 +161,7 @@ head(iris) # returns the first parts of a data frame
 head(iris, 10) # returns the first 10 parts of a data frame
 tail(iris) # returns the last parts of a data frame
 tail(iris, 10) # returns the last 10 parts of a data frame
-summary(iris) # ___
+summary(iris) # produce result summaries of the results of various model fitting functions
 iris[1, ] # ___
 iris[c(1, 6, 12),] # ___
 iris[ ,2] # ___

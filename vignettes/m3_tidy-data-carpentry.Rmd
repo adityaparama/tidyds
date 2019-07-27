@@ -94,7 +94,7 @@ table4a
 Kasus seperti pada `table4a` tersebut dapat diselesaikan dengan menggunakan fungsi `gather()`. Dapatkah Anda menyebutkan alasannya? Perhatikan contoh berikut:
 
 ```{r}
-table4a_tidy <- gather(table4a, key = "year", value = "cases", 2:3)
+table4a_tidy <- gather(table4a, key = "year", value = "cases", 2:3, convert = TRUE)
 table4a_tidy
 ```
 
@@ -134,7 +134,7 @@ Sekarang cetaklah data `who` dan `population` pada layar!
 **Data`who`**
 
 ```{r}
-?who
+who
 ```
 
 **Data `population`**

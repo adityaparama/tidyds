@@ -1,0 +1,154 @@
+---
+title: "Shiny for machine learning"
+author: "Muhammad Aswan Syahputra"
+output: html_document
+runtime: shiny
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+<!-- Baris kode di atas merupakan pengaturan untuk dokumen R Markdown dan tidak akan tercetak pada berkas dokumen akhir -->
+
+> Dalam modul ini Anda akan belajar bagaimana cara membuat aplikasi web sederhana untuk menyajikan model pembelajaran mesin.
+
+Serupa dengan modul sebelumnya, pada modul ini kita akan kembali belajar membuat aplikasi web menggunakan bahasa pemrograman R. Aplikasi web yang akan kita buat sekarang memiliki tujuan untuk menyajikan model pembelajaran mesin kepada pengguna. Skenarionya adalah kita membuat sistem prediksi nilai ujian mata pelajaran IPA untuk ujian nasional tingkat SMP di Kota Bandung. Apakah Anda masih ingat dengan model yang dibuat pada modul 5?
+
+Sedikit berbeda dengan modul 7, pada modul ini semua baris kode R untuk membuat aplikasi web sudah disediakan dengan lengkap. Fokus kita sekarang adalah bagaimana menyusun struktur dari aplikasi web tersebut dalam wadah. Dalam pelatihan ini "wadah" yang dimaksud adalah sebuat paket R. Singkatnya kita akan mempersiapkan sebuah sistem sehingga saat Anda menjalankan fungsi `run_ipa()`, maka secara otomatis akan muncul aplikasi web prediksi nilai ujian IPA.
+
+Sekarang silakan jalankan kembali kode kode yang sebelumnya pernah kita jalankan pada modul 7 seperti berikut:
+
+```{r, eval = FALSE}
+devtools::load_all()
+run_aq()
+```
+
+Ya kita akan membuat sistem "deploy" aplikasi web seperti contoh tersebut. Berikut merupakan prosedur yang harus Anda jalankan:
+
+1. Tambahkan sebuah direktori baru bernama "ipa" di bawah subdirektori "inst"
+2. Di dalam subdirektori "run_ipa" buatlah tiga R script baru dengan nama masing-masing adalah "global.R", "ui.R", dan "server.R" (Petunjuk: menu "File -- New File -- R Script")
+3. Salinlah baris kode dalam tiga *chunk* berikut pada setiap R Script yang telah Anda buat dengan sesuai. Kita akan membahas kode-kode tersebut setelah aplikasi web berhasil dijalankan menggunakan fungsi `run_ipa()`. (Petunjuk: perhatikan nama **chunk** dengan baik)
+
+```{r global}
+library(shiny)
+library(here)
+library(recipes)
+library(parsnip)
+
+load(here("data", "un_smp_recipe.rda"))
+load(here("data", "un_smp_lm.rda"))
+load(here("data", "un_smp_rf.rda"))
+```
+
+```{r ui}
+ui <- fluidPage(
+  headerPanel("Hmm... berapa ya?"),
+  sidebarLayout(
+    sidebarPanel(
+      selectInput(inputId = "tahun",
+                  label = "Tahun ujian",
+                  choices = as.character(2015:2019)),
+      selectInput(inputId = "status",
+                  label = "Status sekolah",
+                  choices = c("Negeri", "Swasta")),
+      numericInput(inputId = "jumlah_peserta",
+                   label = "Jumlah peserta ujian",
+                   min = 20,
+                   max = 500,
+                   value = 354),
+      numericInput(inputId = "bahasa_indonesia",
+                   label = "Nilai ujian Bahasa Indonesia",
+                   min = 0,
+                   max = 100,
+                   value = 78),
+      numericInput(inputId = "bahasa_inggris",
+                   label = "Nilai ujian Bahasa Inggris",
+                   min = 0,
+                   max = 100,
+                   value = 78),
+      numericInput(inputId = "matematika",
+                   label = "Nilai ujian matematika",
+                   min = 0,
+                   max = 100,
+                   value = 78),
+      actionButton(inputId = "predict",
+                   label = "Nilai ujian IPA-ku berapa ya?")
+    ),
+    mainPanel(
+      uiOutput("ipa_prediction")
+    )
+  )
+)
+```
+
+
+```{r server}
+server <- function(input, output, session) {
+  un_smp_new <- eventReactive(input$predict, {
+    data.frame(
+      tahun = input$tahun,
+      status = input$status,
+      jumlah_peserta = input$jumlah_peserta,
+      bahasa_indonesia = input$bahasa_indonesia,
+      bahasa_inggris = input$bahasa_inggris,
+      matematika = input$matematika,
+      stringsAsFactors = FALSE
+    )
+  })
+  
+  to_predict <- reactive({
+    req(un_smp_new())
+    un_smp_recipe %>% 
+      prep() %>% 
+      bake(un_smp_new())
+  })
+  
+  ipa_prediction <- reactive({
+    req(to_predict())
+    predict(un_smp_lm, new_data = to_predict())
+  })
+  
+  output$ipa_prediction <- renderUI({
+    wellPanel(
+      h4("Prediksi nilai ujian IPA kamu:"),
+      h1(strong(round(ipa_prediction(), digits = 2))),
+      h2(ifelse(ipa_prediction() >= 75, 
+                "Selamat ya, calon jadi Data Scientist nih! ;)",
+                "Tetap semangat ya! Ikut belajar di R Academy Batch selanjutnya yuk ;)")),
+      hr(),
+      em("Maaf ya saya bukan peramal, hanya seorang data scientist pengguna metode pemdelan Random Forest", icon("smile"))
+    )
+  })
+}
+```
+
+4. Buatlah R Script baru dan simpan dalam direktori "R" dengan nama berkas "run-ipa.R". Salinlah baris kode berikut pada R Script tersebut!
+
+```{r run-ipa}
+#' Run IPA Random Forest
+#'
+#' Launch shiny application.
+#' @importFrom shiny runApp
+#' @export
+run_ipa <- function() {
+  app_dir <- system.file("ipa", package = "tidyds")
+  shiny::runApp(app_dir, display.mode = "normal")
+}
+```
+
+5. Terakhir jalankanlah baris kode berikut:
+
+```{r, eval = FALSE}
+devtools::document()
+devtools::load_all()
+run_ipa()
+```
+
+Jika tidak ada pesan galat dan munculnya laman berisi aplikasi web secara otomatis, maka selamat Anda telah berhasil menyusun "struktur" aplikasi web tersebut untuk disajikan sebagai paket R! Bagaimana jika Anda ingin menyajikan aplikasi serupa dengan tetap menggunakan fungsi `run_ipa()` namun pemodelan yang digunakan adalah metode regresi linier?
+
+> Selamat Anda telah menyelesaikan semua modul dalam pelatihan ini! Semoga ilmu yang Anda dapatkan dapat bermanfaat.
